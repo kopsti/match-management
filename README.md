@@ -17,3 +17,5 @@ docker-compose up
 
 # Documentation
 Swagger Docs available under localhost:8080/swagger-ui.html
+
+Postman collection included: Match Management.postman_collection.json
