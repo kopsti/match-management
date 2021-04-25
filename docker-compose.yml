@@ -1,0 +1,37 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:latest
+    network_mode: bridge
+    container_name: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=testdb
+    restart: unless-stopped
+  springbootapp:
+    image: match-management:0.0.1-SNAPSHOT
+    network_mode: bridge
+    container_name: match-management
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/testdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+volumes:
+  postgres-data:
